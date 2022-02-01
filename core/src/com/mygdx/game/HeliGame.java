@@ -2,41 +2,77 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Helicopter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 public class HeliGame extends ApplicationAdapter {
 
-	Helicopter heli;
-	private Animator animator;
-	
+	private ArrayList<com.badlogic.gdx.math.Rectangle> helicopters;
+
+	private Helicopter heli1;
+	private Helicopter heli2;
+	private Helicopter heli3;
+
 	@Override
 	public void create () {
 
-		heli = new Helicopter(100,100);
-		animator = new Animator();
+		heli1 = new Helicopter(100,100, 5, 5);
+		heli2 = new Helicopter(200,10, -4, -4);
+		heli3 = new Helicopter(400,10, 2, 2);
+
+		helicopters = new ArrayList<Rectangle>();
+
+		helicopters.add(heli1.getRect());
+		helicopters.add(heli2.getRect());
+		helicopters.add(heli3.getRect());
 	}
 
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
-		heli.getBatch().begin();
-		TextureRegion currentFrame = animator.getWalkAnimation().getKeyFrame(animator.getStateTime(), true);
-		heli.getBatch().draw(currentFrame, heli.getX() - currentFrame.getTexture().getWidth()/2, heli.getY() - currentFrame.getTexture().getHeight()/2);
-		heli.update();
 
-		heli.getBatch().end();
+		heli1.getBatch().begin();
+		TextureRegion currentFrame = heli1.getAnimator().getWalkAnimation().getKeyFrame(heli1.getAnimator().getStateTime(), true);
+		heli1.getBatch().draw(currentFrame, heli1.getX() - heli1.getTextureRegion().getTexture().getWidth()/9, heli1.getY() - heli1.getTextureRegion().getTexture().getHeight()/2);
 
-		animator.incrementStateTime(Gdx.graphics.getDeltaTime()); // Accumulate elapsed animation time
+
+
+		heli1.update();
+		heli1.getBatch().end();
+		heli1.getAnimator().incrementStateTime(Gdx.graphics.getDeltaTime()); // Accumulate elapsed animation time
+
+		heli2.getBatch().begin();
+		TextureRegion currentFrame2 = heli2.getAnimator().getWalkAnimation().getKeyFrame(heli2.getAnimator().getStateTime(), true);
+		heli2.getBatch().draw(currentFrame2, heli2.getX() - heli2.getTextureRegion().getTexture().getWidth()/9, heli2.getY() - heli2.getTextureRegion().getTexture().getHeight()/2);
+		heli2.update();
+		heli2.getBatch().end();
+		heli2.getAnimator().incrementStateTime(Gdx.graphics.getDeltaTime());
+
+		heli3.getBatch().begin();
+		TextureRegion currentFrame3 = heli3.getAnimator().getWalkAnimation().getKeyFrame(heli3.getAnimator().getStateTime(), true);
+		heli3.getBatch().draw(currentFrame3, heli3.getX() - heli3.getTextureRegion().getTexture().getWidth()/9, heli3.getY() - heli3.getTextureRegion().getTexture().getHeight()/2);
+		heli3.update();
+		heli3.getBatch().end();
+		heli3.getAnimator().incrementStateTime(Gdx.graphics.getDeltaTime());
 
 	}
 	
 	@Override
 	public void dispose () {
-		heli.getBatch().dispose();
-		heli.getTextureRegion().getTexture().dispose();
+		heli1.getBatch().dispose();
+		heli1.getTextureRegion().getTexture().dispose();
+		heli2.getBatch().dispose();
+		heli2.getTextureRegion().getTexture().dispose();
+		heli3.getBatch().dispose();
+		heli3.getTextureRegion().getTexture().dispose();
 	}
 }
