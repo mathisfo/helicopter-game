@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,54 +7,39 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Animator {
+    private Texture images;
+    private Animation<TextureRegion> animationCycle;
+    private SpriteBatch spriteBatch;
 
-    // Objects used
-    Animation<TextureRegion> walkAnimation; // Must declare frame type (TextureRegion)
-    Texture walkSheet;
-    SpriteBatch spriteBatch;
-
-    // A variable for tracking elapsed time for the animation
-    float stateTime;
-
-    // Constant rows and columns of the sprite sheet
-    private static final int FRAME_COLS = 4, FRAME_ROWS = 1;
+    private float dtTime;
 
     public Animator() {
 
-        // Load the sprite sheet as a Texture
-        walkSheet = new Texture(Gdx.files.internal("heliAnimaton.png"));
+        images = new Texture(Gdx.files.internal("heliAnimaton.png"));
 
-        // Use the split utility method to create a 2D array of TextureRegions. This is
-        // possible because this sprite sheet contains frames of equal size and they are
-        // all aligned.
-        TextureRegion[][] tmp = TextureRegion.split(walkSheet,
-                walkSheet.getWidth() / FRAME_COLS,
-                walkSheet.getHeight() / FRAME_ROWS);
+        TextureRegion[][] template = TextureRegion.split(images,
+                images.getWidth() / 4,
+                images.getHeight());
 
-        // Place the regions into a 1D array in the correct order, starting from the top
-        // left, going across first. The Animation constructor requires a 1D array.
-        TextureRegion[] walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        TextureRegion[] frames = new TextureRegion[4];
         int index = 0;
-        for (int i = 0; i < FRAME_ROWS; i++) {
-            for (int j = 0; j < FRAME_COLS; j++) {
-                walkFrames[index++] = tmp[i][j];
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < 4; j++) {
+                frames[index++] = template[i][j];
             }
         }
 
-        // Initialize the Animation with the frame interval and array of frames
-        walkAnimation = new Animation<TextureRegion>(0.100f, walkFrames);
+        animationCycle = new Animation<TextureRegion>(0.100f, frames);
 
-        // Instantiate a SpriteBatch for drawing and reset the elapsed animation
-        // time to 0
         spriteBatch = new SpriteBatch();
-        stateTime = 0f;
+        dtTime = 0f;
     }
 
-    public Animation<TextureRegion> getWalkAnimation() {
-        return walkAnimation;
+    public Animation<TextureRegion> getAnimationCycle() {
+        return animationCycle;
     }
     public Texture getCurrentTexture() {
-        return walkAnimation.getKeyFrame(stateTime).getTexture();
+        return animationCycle.getKeyFrame(dtTime).getTexture();
     }
 
 
@@ -63,12 +47,12 @@ public class Animator {
         return spriteBatch;
     }
 
-    public void incrementStateTime(float offset) {
-        stateTime+= offset;
+    public void incrementdtTime(float offset) {
+        dtTime += offset;
     }
 
-    public float getStateTime() {
-        return stateTime;
+    public float getDtTime() {
+        return dtTime;
     }
 
 

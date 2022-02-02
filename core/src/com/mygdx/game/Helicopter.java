@@ -20,11 +20,21 @@ import java.util.Random;
 public class Helicopter  {
     private Texture texture;
     private Vector3 pos;
+
+    public void setVel(Vector3 vel) {
+        this.vel = vel;
+    }
+
+    public Vector3 getVel() {
+        return vel;
+    }
+
     private Vector3 vel;
     private TextureRegion textureRegion;
-    private int x = Gdx.graphics.getWidth() / 2;
-    private int y = Gdx.graphics.getHeight() / 2;
-
+    //private int x = Gdx.graphics.getWidth() / 2;
+    //private int y = Gdx.graphics.getHeight() / 2;
+    private int x;
+    private int y;
 
 
     private Rectangle rect;
@@ -34,30 +44,29 @@ public class Helicopter  {
     }
 
     private Animator animator;
-    Random rd = new Random();
 
 
     public Helicopter(int x, int y, int velX, int velY) {
         animator = new Animator();
         texture = animator.getCurrentTexture();
         textureRegion = new TextureRegion(texture);
-        rect = new Rectangle(texture.getHeight(), texture.getWidth(), getX(), getY());
-        x = this.x;
-        y = this.y;
+        rect = new Rectangle(texture.getHeight(), texture.getWidth(), x, y);
+        this.x = x;
+        this.y = y;
         pos = new Vector3(x, y , 0);
         vel = new Vector3(velX, velY, 0);
 
 
     }
 
-    public void update() {
+    public void update(Rectangle rect) {
 
 
-        if (x > Gdx.graphics.getWidth() - texture.getWidth()/8 || x < 0 + texture.getWidth()/9) {
+        if (x > Gdx.graphics.getWidth() - texture.getWidth()/8 || x < 0 + texture.getWidth()/9 || rect.overlaps(this.getRect()) ) {
 
             vel.x = -vel.x;
 
-            //animator.getWalkAnimation().getKeyFrame(animator.getStateTime()).flip(true,false);
+
 
 
         }
@@ -70,15 +79,7 @@ public class Helicopter  {
         pos.add(x += vel.x, y += vel.y, 0);
     }
 
-    public boolean collides(ArrayList<Rectangle> other) {
-        for (Rectangle o : other) {
-            if (o.overlaps(this.rect)) {
-                return true;
-            }
-        }
 
-        return false;
-    }
 
 
     public TextureRegion getTextureRegion() {
@@ -99,4 +100,6 @@ public class Helicopter  {
     public Rectangle getRect() {
         return rect;
     }
+
+
 }
